@@ -1,4 +1,4 @@
-from utils.handle_install import install_package
+from utils.handle_install import serialize_install_packages
 from utils.handle_install import is_package_installed
 
 
@@ -11,10 +11,9 @@ def install_mongodb_compass() -> None:
         "Fix dependencies (if needed)": "sudo apt-get install -f -y",
         "Remove .deb file after installation": "rm mongodb-compass_1.35.0_amd64.deb",
     }
-    for package_name, query in curl_query.items():
-        try:
-            install_package(query, package_name)
-        except Exception as error:
-            print(f"Error: Failed to execute '{package_name}': {error}")
-            return
+    try:
+        serialize_install_packages(curl_query)
+    except Exception as error:
+        print(f"{error}")
+        return
     return
