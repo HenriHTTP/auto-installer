@@ -1,5 +1,5 @@
 from utils.handle_install import is_package_installed
-from utils.handle_install import install_package
+from utils.handle_install import serialize_install_packages
 
 
 def install_node() -> None:
@@ -8,13 +8,11 @@ def install_node() -> None:
         return
     curl_query = {
         "Setup Node.js 18 repository": "curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -",
-        "Install Node.js 18": "sudo apt install -y nodejs"
+        "Install Node.js 18": "sudo apt install -y nodejs",
     }
-    for name_package, query in curl_query.items():
-        try:
-            install_package(query, name_package)
-            return
-        except Exception as error:
-            print(f"error: error on install node: {error}")
-            return
+    try:
+        serialize_install_packages(curl_query)
+    except Exception as error:
+        print(f"{error}")
         return
+    return

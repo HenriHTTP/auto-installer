@@ -1,10 +1,9 @@
-from utils.handle_install import install_package
 from utils.handle_install import is_package_installed
+from utils.handle_install import serialize_install_packages
 
 
 def install_docker() -> None:
     if is_package_installed("docker"):
-        print("Docker já está instalado.")
         return
     curl_query: dict[str, str] = {
         "Update packages": "sudo apt update -y",
@@ -20,10 +19,9 @@ def install_docker() -> None:
         ),
         "Docker": "sudo apt install -y docker-ce",
     }
-    for package_name, query in curl_query.items():
-        try:
-            install_package(package_name, query)
-        except Exception as error:
-            print(f"Error: Failed to execute '{package_name}': {error}")
-            return
+    try:
+        serialize_install_packages(curl_query)
+    except Exception as error:
+        print(f"{error}")
+        return
     return
